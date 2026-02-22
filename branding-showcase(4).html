@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stack Trace — Brand Identity</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,400;1,700;1,900&family=Barlow+Condensed:wght@300;400;600;700;800;900&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --pink:    #FF5C7A;
+  --pink-dim: rgba(255,92,122,0.12);
+  --indigo:  #6366F1;
+  --bg:      #0A090F;
+  --bg2:     #0F0E16;
+  --bg3:     #14131C;
+  --cream:   #E8E2D9;
+  --ink:     rgba(232,226,217,0.9);
+  --ink2:    rgba(232,226,217,0.42);
+  --ink3:    rgba(232,226,217,0.08);
+  --ink4:    rgba(232,226,217,0.04);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Barlow Condensed', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ─────────────────────────
+   TOPBAR
+───────────────────────── */
+.topbar {
+  padding: 20px 52px;
+  border-bottom: 1px solid var(--ink3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  opacity: 0;
+  animation: rise 0.6s 0.0s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.tb-left {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink2);
+}
+.tb-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tb-mark {
+  width: 28px; height: 28px;
+  background: var(--pink);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.tb-mark span {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 16px;
+  color: #fff;
+  line-height: 1;
+}
+.tb-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream);
+}
+.tb-right {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--pink);
+}
+
+/* ─────────────────────────
+   HERO
+───────────────────────── */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  border-bottom: 1px solid var(--ink3);
+  min-height: 88vh;
+  opacity: 0;
+  animation: rise 0.8s 0.08s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+
+.hero-left {
+  padding: 64px 52px 56px;
+  border-right: 1px solid var(--ink3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+/* subtle terminal scanlines */
+.hero-left::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(255,92,122,0.012) 3px,
+    rgba(255,92,122,0.012) 4px
+  );
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink2);
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--pink);
+  flex-shrink: 0;
+}
+
+.hero-titles {
+  position: relative;
+  z-index: 1;
+}
+.ht-stack {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: clamp(80px, 13vw, 168px);
+  line-height: 0.86;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  color: var(--cream);
+}
+.ht-trace {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: clamp(72px, 11.5vw, 150px);
+  line-height: 0.86;
+  color: var(--pink);
+  letter-spacing: -0.02em;
+  display: block;
+  margin-left: 52px; /* intentional offset */
+  margin-top: 6px;
+}
+/* ghost outline word — detective/mystery layer */
+.ht-ghost {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: clamp(80px, 13vw, 168px);
+  line-height: 0.86;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  -webkit-text-stroke: 1px rgba(232,226,217,0.15);
+  color: transparent;
+  display: block;
+  margin-top: 6px;
+}
+
+.hero-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 40px;
+  border-top: 1px solid var(--ink3);
+  position: relative;
+  z-index: 1;
+}
+.hb-tagline {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--ink2);
+  line-height: 1.55;
+  max-width: 340px;
+}
+.hb-tagline strong {
+  color: var(--cream);
+  font-style: normal;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1.05em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.hb-mono {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink2);
+  text-align: right;
+  line-height: 1.9;
+}
+.hb-mono .hi { color: var(--pink); }
+
+/* RIGHT PANEL */
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40px 36px;
+}
+
+/* Terminal block */
+.terminal {
+  background: var(--bg3);
+  border: 1px solid var(--ink3);
+  padding: 0;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  line-height: 1.75;
+}
+.term-bar {
+  background: var(--bg2);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-bottom: 1px solid var(--ink3);
+}
+.term-dot { width: 8px; height: 8px; border-radius: 50%; }
+.term-title {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink2);
+  margin-left: 6px;
+}
+.term-body { padding: 20px 16px; }
+.tl { display: block; }
+.tl-dim { color: var(--ink2); }
+.tl-pink { color: var(--pink); }
+.tl-ind { color: var(--indigo); }
+.tl-cream { color: var(--cream); }
+.tl-err {
+  color: var(--pink);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.tl-err::before {
+  content: '×';
+  font-size: 13px;
+  line-height: 1;
+}
+.cursor {
+  display: inline-block;
+  width: 7px; height: 13px;
+  background: var(--pink);
+  vertical-align: middle;
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+}
+
+/* Stats */
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--ink3);
+  border: 1px solid var(--ink3);
+}
+.stat-box {
+  background: var(--bg2);
+  padding: 18px 16px;
+}
+.stat-n {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 30px;
+  letter-spacing: -0.03em;
+  color: var(--pink);
+  line-height: 1;
+  margin-bottom: 3px;
+}
+.stat-l {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink2);
+}
+
+/* CTAs */
+.cta-stack { display: flex; flex-direction: column; gap: 10px; }
+.btn-pink {
+  background: var(--pink);
+  color: #fff;
+  border: none;
+  padding: 16px 20px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.15s;
+}
+.btn-pink:hover { background: #f0405e; }
+.btn-ghost {
+  background: transparent;
+  color: var(--ink2);
+  border: 1px solid var(--ink3);
+  padding: 14px 20px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border-color 0.15s, color 0.15s;
+}
+.btn-ghost:hover { border-color: var(--pink); color: var(--pink); }
+
+/* ─────────────────────────
+   TENSION BAND
+───────────────────────── */
+.tension {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--ink3);
+  opacity: 0;
+  animation: rise 0.7s 0.18s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+
+.t-dark {
+  background: var(--bg2);
+  padding: 60px 52px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 460px;
+  position: relative;
+  overflow: hidden;
+  border-right: 1px solid var(--ink3);
+}
+/* big ghost number — case number like drei fragezeichen */
+.t-dark::before {
+  content: '001';
+  position: absolute;
+  bottom: -20px; right: -10px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 180px;
+  letter-spacing: -0.04em;
+  color: rgba(232,226,217,0.03);
+  line-height: 1;
+  pointer-events: none;
+}
+.t-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.t-label::before { content: '//'; color: var(--pink); }
+
+.t-headline {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: clamp(36px, 4.5vw, 56px);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--cream);
+}
+.t-headline .sans {
+  font-style: normal;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 0.88em;
+  letter-spacing: 0.04em;
+  color: var(--pink);
+  display: block;
+}
+
+.t-body {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--ink2);
+  font-weight: 300;
+  max-width: 360px;
+  font-family: 'Barlow Condensed', sans-serif;
+  letter-spacing: 0.01em;
+}
+
+.live-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--ink3);
+  padding: 8px 14px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink2);
+  align-self: flex-start;
+}
+.live-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--pink);
+  box-shadow: 0 0 6px var(--pink);
+  animation: blink-soft 2s ease-in-out infinite;
+}
+
+.t-pink {
+  background: var(--pink);
+  padding: 60px 52px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+.t-pink::before {
+  content: '';
+  position: absolute;
+  bottom: -100px; left: -100px;
+  width: 380px; height: 380px;
+  border: 80px solid rgba(255,255,255,0.07);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.t-pink::after {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 220px; height: 220px;
+  border: 40px solid rgba(255,255,255,0.05);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.tp-case {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  position: relative; z-index: 1;
+}
+.tp-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: clamp(90px, 14vw, 160px);
+  letter-spacing: -0.04em;
+  line-height: 0.85;
+  color: rgba(255,255,255,0.18);
+  position: relative; z-index: 1;
+}
+.tp-quote {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.92);
+  max-width: 310px;
+  position: relative; z-index: 1;
+}
+.tp-attr {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-top: 14px;
+  position: relative; z-index: 1;
+}
+.tp-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  position: relative; z-index: 1;
+}
+.tp-val {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 48px;
+  letter-spacing: -0.03em;
+  color: #fff;
+  line-height: 1;
+}
+.tp-val-l {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-top: 4px;
+}
+.sq-btn {
+  width: 48px; height: 48px;
+  border: 2px solid rgba(255,255,255,0.35);
+  background: transparent;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.sq-btn:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
+
+/* ─────────────────────────
+   SPECIMEN
+───────────────────────── */
+.specimen {
+  padding: 72px 52px;
+  border-bottom: 1px solid var(--ink3);
+  opacity: 0;
+  animation: rise 0.7s 0.28s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.spec-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 48px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--ink3);
+}
+.spec-h-l {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink2);
+}
+.spec-h-r {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--pink);
+}
+
+.spec-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--ink3);
+}
+.sc {
+  background: var(--bg);
+  padding: 36px 40px;
+}
+.sc-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink2);
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sc-a {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 72px;
+  line-height: 0.88;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--cream);
+}
+.sc-a em {
+  font-style: italic;
+  color: var(--pink);
+  font-size: 0.72em;
+  display: block;
+  font-family: 'Playfair Display', serif;
+  text-transform: none;
+  letter-spacing: 0;
+  margin-top: 6px;
+}
+
+.sc-b {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 1.1;
+  color: var(--ink2);
+}
+.sc-b strong {
+  color: var(--cream);
+  font-style: normal;
+  font-weight: 900;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1em;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  display: block;
+  line-height: 0.9;
+}
+
+.sc-c {
+  font-size: 15px;
+  line-height: 1.72;
+  color: var(--ink2);
+  font-weight: 300;
+  font-family: 'Barlow Condensed', sans-serif;
+  letter-spacing: 0.01em;
+}
+.sc-c .mark { background: var(--pink); color: #fff; padding: 1px 5px; font-weight: 600; }
+.sc-c .acc { color: var(--indigo); font-family: 'Playfair Display', serif; font-style: italic; }
+
+.sc-d {
+  font-family: 'DM Mono', monospace;
+  font-size: 11.5px;
+  line-height: 1.85;
+  color: var(--ink2);
+}
+.kw { color: var(--pink); }
+.val { color: var(--indigo); }
+.str { color: var(--cream); }
+.comment { color: rgba(232,226,217,0.25); }
+
+/* ─────────────────────────
+   BRAND APPLICATIONS
+───────────────────────── */
+.brand-apps {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-bottom: 1px solid var(--ink3);
+  opacity: 0;
+  animation: rise 0.7s 0.38s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.ba-cell {
+  padding: 48px 40px;
+  border-right: 1px solid var(--ink3);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.ba-cell:last-child { border-right: none; }
+.ba-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink2);
+}
+
+/* Logo versions */
+.logo-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.lmark {
+  width: 36px; height: 36px;
+  background: var(--pink);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.lmark span {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 20px;
+  color: #fff;
+  line-height: 1;
+}
+.lword {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cream);
+}
+/* dark bg version */
+.logo-on-pink {
+  background: var(--pink);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.logo-on-dark {
+  background: var(--bg3);
+  border: 1px solid var(--ink3);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.lmark-inv {
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.18);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.logo-note {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink2);
+  line-height: 1.9;
+  border-top: 1px solid var(--ink3);
+  padding-top: 18px;
+  margin-top: 4px;
+}
+
+/* Colour tiles */
+.ctiles { display: flex; flex-direction: column; gap: 2px; }
+.ct {
+  padding: 13px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ct-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.ct-hex {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+}
+
+/* UI */
+.ui-stack { display: flex; flex-direction: column; gap: 12px; }
+.tags-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 5px 9px;
+  border: 1px solid;
+}
+.tag-p { border-color: var(--pink); color: var(--pink); }
+.tag-i { border-color: var(--indigo); color: var(--indigo); }
+.tag-g { border-color: var(--ink3); color: var(--ink2); }
+.tag-f { background: var(--pink); border-color: var(--pink); color: #fff; }
+.divider { height: 1px; background: var(--ink3); }
+.ui-field {
+  border: none;
+  border-bottom: 1px solid var(--ink3);
+  background: transparent;
+  padding: 10px 0;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px;
+  color: var(--cream);
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s;
+  letter-spacing: 0.02em;
+}
+.ui-field:focus { border-color: var(--pink); }
+.ui-field::placeholder { color: var(--ink2); }
+.ui-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.ui-metric-n {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 34px;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--pink);
+}
+.ui-metric-l {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink2);
+}
+
+/* ─────────────────────────
+   PALETTE BAR
+───────────────────────── */
+.palette {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  height: 64px;
+  border-bottom: 1px solid var(--ink3);
+  opacity: 0;
+  animation: rise 0.6s 0.48s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.pc {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 0 9px 10px;
+}
+.pc-l {
+  font-family: 'DM Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ─────────────────────────
+   COLOPHON
+───────────────────────── */
+.colophon {
+  padding: 20px 52px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0;
+  animation: rise 0.6s 0.56s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.col-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.col-mark {
+  width: 22px; height: 22px;
+  background: var(--pink);
+  display: flex; align-items: center; justify-content: center;
+}
+.col-mark span {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 13px;
+  color: #fff;
+  line-height: 1;
+}
+.col-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream);
+}
+.col-right {
+  display: flex;
+  gap: 28px;
+}
+.col-item {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink2);
+}
+.col-item.hi { color: var(--pink); }
+
+/* ─────────────────────────
+   ANIMATIONS
+───────────────────────── */
+@keyframes rise {
+  from { opacity:0; transform:translateY(18px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes blink {
+  0%,100%{ opacity:1; } 50%{ opacity:0; }
+}
+@keyframes blink-soft {
+  0%,100%{ opacity:1; } 50%{ opacity:0.25; }
+}
+
+/* ─────────────────────────
+   RESPONSIVE
+───────────────────────── */
+@media(max-width:860px){
+  .topbar { padding:16px 24px; }
+  .hero { grid-template-columns:1fr; min-height:auto; }
+  .hero-left { padding:48px 24px; border-right:none; border-bottom:1px solid var(--ink3); }
+  .hero-right { padding:36px 24px; }
+  .tension { grid-template-columns:1fr; }
+  .t-dark { border-right:none; border-bottom:1px solid var(--ink3); }
+  .specimen { padding:52px 24px; }
+  .spec-grid { grid-template-columns:1fr; }
+  .brand-apps { grid-template-columns:1fr; }
+  .ba-cell { border-right:none; border-bottom:1px solid var(--ink3); }
+  .ba-cell:last-child { border-bottom:none; }
+  .palette { grid-template-columns:repeat(4,1fr); height:auto; }
+  .pc { padding:10px; }
+  .colophon { flex-direction:column; gap:16px; padding:20px 24px; }
+  .col-right { flex-wrap:wrap; gap:12px; justify-content:center; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <span class="tb-left">Brand Identity · Draft 01</span>
+  <div class="tb-logo">
+    <div class="tb-mark"><span>S</span></div>
+    <span class="tb-name">Stack Trace</span>
+  </div>
+  <span class="tb-right">Follow the trace.</span>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Learning in Public · AI · ServiceNow · Web</div>
+    <div class="hero-titles">
+      <div class="ht-stack">Stack</div>
+      <em class="ht-trace">Trace.</em>
+      <div class="ht-ghost">Solved.</div>
+    </div>
+    <div class="hero-bottom">
+      <p class="hb-tagline">
+        Every bug is a clue. Every build is a case.<br>
+        <strong>Follow the trace.</strong>
+      </p>
+      <div class="hb-mono">
+        <span class="hi">by Lilli</span><br>
+        ServiceNow · AI · Web<br>
+        Learning in public<br>
+        Est. 2026
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <!-- Terminal -->
+    <div class="terminal">
+      <div class="term-bar">
+        <div class="term-dot" style="background:#FF5C7A"></div>
+        <div class="term-dot" style="background:#6366F1"></div>
+        <div class="term-dot" style="background:rgba(232,226,217,0.2)"></div>
+        <span class="term-title">stack-trace · episode-01</span>
+      </div>
+      <div class="term-body">
+        <span class="tl tl-dim">// Tracing the error...</span>
+        <span class="tl"><span class="tl-pink">Error</span>: undefined is not a function</span>
+        <span class="tl tl-dim">&nbsp;&nbsp;at <span class="tl-cream">buildProject</span> (idea.js:<span class="tl-ind">42</span>)</span>
+        <span class="tl tl-dim">&nbsp;&nbsp;at <span class="tl-cream">ship</span> (courage.js:<span class="tl-ind">7</span>)</span>
+        <span class="tl tl-dim">&nbsp;&nbsp;at <span class="tl-cream">learn</span> (public.js:<span class="tl-ind">1</span>)</span>
+        <span class="tl">&nbsp;</span>
+        <span class="tl tl-dim">// investigating...</span>
+        <span class="tl"><span class="tl-pink">→</span> found: missing confidence</span>
+        <span class="tl"><span class="tl-pink">→</span> fix: ship anyway</span>
+        <span class="tl">&nbsp;</span>
+        <span class="tl"><span class="tl-ind">✓</span> case closed.<span class="cursor"></span></span>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div class="stat-n">01</div>
+        <div class="stat-l">Cases Open</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-n">∞</div>
+        <div class="stat-l">To Learn</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-n">0</div>
+        <div class="stat-l">Perfect Builds</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-n">100%</div>
+        <div class="stat-l">In Public</div>
+      </div>
+    </div>
+
+    <!-- CTAs -->
+    <div class="cta-stack">
+      <button class="btn-pink">Follow the Trace <span>→</span></button>
+      <button class="btn-ghost">Read Episode 01 <span>↗</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- TENSION -->
+<section class="tension">
+  <div class="t-dark">
+    <span class="t-label">The Method</span>
+    <div class="t-headline">
+      Every error<br>leaves a
+      <span class="sans">Trace.</span>
+    </div>
+    <p class="t-body">Stack Trace ist kein perfekter Blog. Es ist ein offenes Notizbuch — mit echten Fehlern, echten Lösungen und dem ganzen Weg dazwischen. Weil der Prozess der eigentliche Content ist.</p>
+    <div class="live-tag">
+      <span class="live-dot"></span>
+      Now building in public
+    </div>
+  </div>
+  <div class="t-pink">
+    <span class="tp-case">// Case #001</span>
+    <div class="tp-num">001</div>
+    <div>
+      <div class="tp-quote">"The stack trace doesn't lie. It shows you exactly where things went wrong — and that's where the learning starts."</div>
+      <div class="tp-attr">— Core principle · Stack Trace</div>
+    </div>
+    <div class="tp-bottom">
+      <div>
+        <div class="tp-val">Open</div>
+        <div class="tp-val-l">Current Status</div>
+      </div>
+      <button class="sq-btn">→</button>
+    </div>
+  </div>
+</section>
+
+<!-- TYPE SPECIMEN -->
+<section class="specimen">
+  <div class="spec-header">
+    <span class="spec-h-l">// Type Specimen · Three Voices, One Identity</span>
+    <span class="spec-h-r">tension by design</span>
+  </div>
+  <div class="spec-grid">
+    <div class="sc">
+      <div class="sc-label"><span>Barlow Condensed · 900 · Display</span><span>72px</span></div>
+      <div class="sc-a">
+        Trace<br>the Bug.
+        <em>beautifully.</em>
+      </div>
+    </div>
+    <div class="sc">
+      <div class="sc-label"><span>Playfair Display · Italic · Editorial contrast</span><span>40px</span></div>
+      <div class="sc-b">
+        Follow the clue,<br>find the
+        <strong>Fix.</strong>
+      </div>
+    </div>
+    <div class="sc">
+      <div class="sc-label"><span>Body · Condensed · Prose</span><span>15px</span></div>
+      <div class="sc-c">
+        Stack Trace ist ein Ort für <span class="mark">echtes Lernen</span> — keine gefilterten Erfolge, keine perfekten Tutorials. Nur der <span class="acc">echte Prozess</span>: von der ersten Idee, durch den ersten Fehler, bis zur Lösung. Jede Episode ist ein Fall. Jeder Build eine Spur.
+      </div>
+    </div>
+    <div class="sc">
+      <div class="sc-label"><span>DM Mono · System · Labels · Code</span><span>11px</span></div>
+      <div class="sc-d">
+        <span class="comment">// stack-trace identity system</span><br>
+        <span class="kw">brand</span>.name&nbsp;&nbsp;&nbsp; = <span class="str">"Stack Trace"</span><br>
+        <span class="kw">brand</span>.primary = <span class="val">#FF5C7A</span><br>
+        <span class="kw">brand</span>.accent&nbsp; = <span class="val">#6366F1</span><br>
+        <span class="kw">font</span>.display&nbsp; = <span class="str">"Barlow Condensed"</span><br>
+        <span class="kw">font</span>.editorial = <span class="str">"Playfair Display"</span><br>
+        <span class="kw">font</span>.mono&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = <span class="str">"DM Mono"</span><br>
+        <span class="comment">// follow the trace →</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRAND APPLICATIONS -->
+<section class="brand-apps">
+
+  <!-- LOGO -->
+  <div class="ba-cell">
+    <div class="ba-label">// Logo Variations</div>
+    <div>
+      <div class="logo-row">
+        <div class="lmark"><span>S</span></div>
+        <span class="lword">Stack Trace</span>
+      </div>
+      <div class="logo-on-pink" style="margin-bottom:6px">
+        <div class="lmark-inv"><span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:900;font-size:20px;color:#fff;line-height:1">S</span></div>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;letter-spacing:0.08em;text-transform:uppercase;color:#fff">Stack Trace</span>
+      </div>
+      <div class="logo-on-dark">
+        <div class="lmark"><span>S</span></div>
+        <span class="lword">Stack Trace</span>
+      </div>
+    </div>
+    <div class="logo-note">
+      Mark · Italic S · Playfair Display<br>
+      Wordmark · Barlow Condensed 900<br>
+      Clearspace · 1× mark width
+    </div>
+  </div>
+
+  <!-- COLOURS -->
+  <div class="ba-cell">
+    <div class="ba-label">// Colour System</div>
+    <div class="ctiles">
+      <div class="ct" style="background:var(--pink)">
+        <span class="ct-name" style="color:#fff">Coral Pink</span>
+        <span class="ct-hex" style="color:rgba(255,255,255,0.6)">#FF5C7A</span>
+      </div>
+      <div class="ct" style="background:#E8415E">
+        <span class="ct-name" style="color:#fff">Pink Dark</span>
+        <span class="ct-hex" style="color:rgba(255,255,255,0.55)">#E8415E</span>
+      </div>
+      <div class="ct" style="background:var(--pink-dim);border:1px solid rgba(255,92,122,0.18)">
+        <span class="ct-name" style="color:var(--pink)">Pink Tint</span>
+        <span class="ct-hex" style="color:var(--pink)">12%</span>
+      </div>
+      <div class="ct" style="background:var(--indigo)">
+        <span class="ct-name" style="color:#fff">Deep Indigo</span>
+        <span class="ct-hex" style="color:rgba(255,255,255,0.6)">#6366F1</span>
+      </div>
+      <div class="ct" style="background:var(--bg3);border:1px solid var(--ink3)">
+        <span class="ct-name" style="color:var(--cream)">Void</span>
+        <span class="ct-hex" style="color:var(--ink2)">#0A090F</span>
+      </div>
+      <div class="ct" style="background:var(--cream)">
+        <span class="ct-name" style="color:var(--ink)">Cream</span>
+        <span class="ct-hex" style="color:var(--ink2)">#E8E2D9</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- UI COMPONENTS -->
+  <div class="ba-cell">
+    <div class="ba-label">// UI Components</div>
+    <div class="ui-stack">
+      <div class="tags-row">
+        <span class="tag tag-f">● Live</span>
+        <span class="tag tag-p">Active</span>
+        <span class="tag tag-i">Draft</span>
+        <span class="tag tag-g">Closed</span>
+      </div>
+      <div class="divider"></div>
+      <input class="ui-field" placeholder="Search episodes…" readonly>
+      <div class="divider"></div>
+      <div class="ui-metric">
+        <span class="ui-metric-l">Cases This Month</span>
+        <span class="ui-metric-n">+3</span>
+      </div>
+      <div class="ui-metric" style="margin-top:8px">
+        <span class="ui-metric-l">Bugs Solved</span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:34px;letter-spacing:-0.03em;line-height:1;color:var(--indigo)">12</span>
+      </div>
+      <div class="divider"></div>
+      <button class="btn-pink" style="font-size:12px;padding:13px 16px">Open New Case <span>+</span></button>
+      <button class="btn-ghost" style="padding:12px 16px">Browse Episodes <span>→</span></button>
+    </div>
+  </div>
+
+</section>
+
+<!-- PALETTE -->
+<div class="palette">
+  <div class="pc" style="background:var(--pink)"><span class="pc-l" style="color:rgba(255,255,255,0.6)">Pink 500</span></div>
+  <div class="pc" style="background:#E8415E"><span class="pc-l" style="color:rgba(255,255,255,0.5)">Pink 600</span></div>
+  <div class="pc" style="background:var(--indigo)"><span class="pc-l" style="color:rgba(255,255,255,0.6)">Indigo</span></div>
+  <div class="pc" style="background:#4447D4"><span class="pc-l" style="color:rgba(255,255,255,0.5)">Indigo D</span></div>
+  <div class="pc" style="background:var(--bg3)"><span class="pc-l" style="color:rgba(232,226,217,0.25)">Void</span></div>
+  <div class="pc" style="background:var(--bg2)"><span class="pc-l" style="color:rgba(232,226,217,0.2)">Surface</span></div>
+  <div class="pc" style="background:var(--cream)"><span class="pc-l" style="color:rgba(14,12,11,0.35)">Cream</span></div>
+</div>
+
+<!-- COLOPHON -->
+<footer class="colophon">
+  <div class="col-logo">
+    <div class="col-mark"><span>S</span></div>
+    <span class="col-name">Stack Trace</span>
+  </div>
+  <div class="col-right">
+    <span class="col-item hi">#FF5C7A Primary</span>
+    <span class="col-item">#6366F1 Accent</span>
+    <span class="col-item">Barlow Condensed</span>
+    <span class="col-item">Playfair Display</span>
+    <span class="col-item">DM Mono</span>
+    <span class="col-item">Brand Draft 01 · 2026</span>
+  </div>
+</footer>
+
+</body>
+</html>
